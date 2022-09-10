@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}{{chosen_survey}} - Question {{question_number}}{% endblock %}
+
+{% block content %}
+    <h3>{{surveys[chosen_survey].title}}:</h3>
+    <p>Question {{question_number + 1}}:</p>
+    <p>{{surveys[chosen_survey].questions[question_number].question}}</p>
+    <form action="/survey/{{chosen_survey}}/questions/{{question_number}}/answer" method="post">
+        {% for choice in surveys[chosen_survey].questions[question_number].choices %}
+            <input id="{{choice}}" type="radio" name="answer" value="{{choice}}">
+            <label for="{{choice}}">{{choice}}</label>
+        {% endfor %}
+        <button>Submit</button>
+    </form>
+{% endblock %}

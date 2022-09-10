@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Wet Turtle Home{% endblock %}
+
+{% block content %}
+    <h3>Choose a Survey:</h3>
+    <form action="/survey_chosen">
+        <select name="survey">
+            {% for survey in surveys.keys() %}
+                <option value="{{survey}}">{{surveys[survey].title}}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}
