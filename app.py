@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, flash
+from flask import Flask, request, render_template, redirect, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 from surveys import surveys
 
@@ -19,24 +19,30 @@ def home_page():
 def route_to_chosen_survey():
     """Collects the user's selection as a variable, chosen_survey, and redirects to that survey's page"""
     chosen_survey = request.args['survey']
-    if surveys[chosen_survey].complete == True:
-        return redirect(f"/survey/{chosen_survey}/complete")
     return redirect(f"/survey/{chosen_survey}")
 
 @app.route('/survey/<chosen_survey>')
 def survey_page(chosen_survey):
     """Shows chosen_survey instructions and start button"""
-    return render_template('survey.html',
-                            surveys=surveys,
-                            chosen_survey=chosen_survey)
+    try:
+        if len(session[chosen_survey]) >= len(surveys[chosen_survey].questions):
+            flash("Warning: you have already completed this survey. Pressing start will erase all of your previous responses.", 'error')
+    finally:
+        return render_template('survey.html',
+                                surveys=surveys,
+                                chosen_survey=chosen_survey)
+
+@app.route('/survey/<chosen_survey>/session_init', methods=["POST"])
+def session_init(chosen_survey):
+    """Initializes an object in session"""
+    session[chosen_survey] = []
+    return redirect(f"/survey/{chosen_survey}/questions/0")
 
 @app.route('/survey/<chosen_survey>/questions/<int:question_number>')
 def question_page(chosen_survey, question_number):
     """Shows question by chosen_survey and question_number"""
-    num_of_answers = len(surveys[chosen_survey].answers)
-    if surveys[chosen_survey].complete == True:
-        return redirect(f"/survey/{chosen_survey}/complete")
-    elif len(surveys[chosen_survey].questions) <= num_of_answers:
+    num_of_answers = len(session[chosen_survey])
+    if num_of_answers >= len(surveys[chosen_survey].questions):
         return redirect(f"/survey/{chosen_survey}/thank_you")
     elif num_of_answers != question_number:
         flash("Questions must be answered in order.", 'error')
@@ -50,21 +56,15 @@ def question_page(chosen_survey, question_number):
 def record_answer(chosen_survey, question_number):
     """Records the answer provided by the user in a list"""
     answer = request.form["answer"]
-    surveys[chosen_survey].answers.append(answer)
+    survey_answers = session[chosen_survey]
+    survey_answers.append(answer)
+    session[chosen_survey] = survey_answers
     question_number += 1
     return redirect(f"/survey/{chosen_survey}/questions/{question_number}") 
 
 @app.route('/survey/<chosen_survey>/thank_you')
 def show_thank_you(chosen_survey):
     """Shows the thank you page after completing survey"""
-    surveys[chosen_survey].complete = True
     return render_template('thank_you.html',
-                            chosen_survey=chosen_survey,
-                            surveys=surveys)
-
-@app.route('/survey/<chosen_survey>/complete')
-def show_already_completed(chosen_survey):
-    """Shows a page notifying the user that they have already completed this survey"""
-    return render_template('complete.html',
                             chosen_survey=chosen_survey,
                             surveys=surveys)

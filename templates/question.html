@@ -6,11 +6,15 @@
     <h3>{{surveys[chosen_survey].title}}:</h3>
     <p>Question {{question_number + 1}}:</p>
     <p>{{surveys[chosen_survey].questions[question_number].question}}</p>
-    <form action="/survey/{{chosen_survey}}/questions/{{question_number}}/answer" method="post">
+    <form class="gray" action="/survey/{{chosen_survey}}/questions/{{question_number}}/answer" method="post">
+        <ul>
         {% for choice in surveys[chosen_survey].questions[question_number].choices %}
-            <input id="{{choice}}" type="radio" name="answer" value="{{choice}}">
-            <label for="{{choice}}">{{choice}}</label>
+            <li>
+                <input id="{{choice}}" type="radio" name="answer" value="{{choice}}">
+                <label for="{{choice}}">{{choice}}</label>
+            </li>
         {% endfor %}
-        <button>Submit</button>
+            <li><button>Submit</button></li>
+        </ul>
     </form>
 {% endblock %}

@@ -9,11 +9,13 @@
 </head>
 <body>
     <h1>Wet Turtle Co.</h1>
-    <main id="content">
-        {% for cat, msg in get_flashed_messages(with_categories=true) %}
-            <p class="flash {{cat}}">{{msg}}</p>
-        {% endfor %}
-        {% block content %}{% endblock %}
-    </main>
+    <div class="wrapper">
+        <main id="content">
+            {% for cat, msg in get_flashed_messages(with_categories=true) %}
+                <p class="flash {{cat}}">{{msg}}</p>
+            {% endfor %}
+            {% block content %}{% endblock %}
+        </main>
+    </div>
 </body>
 </html>

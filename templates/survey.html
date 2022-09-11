@@ -5,7 +5,10 @@
 {% block content %}
     <h3>{{surveys[chosen_survey].title}}:</h3>
     <p>{{surveys[chosen_survey].instructions}}</p>
-    <form action="/survey/{{chosen_survey}}/questions/0">
+    <form action="/survey/{{chosen_survey}}/session_init", method="post">
         <button>Start</button>
+    </form>
+    <form action="/">
+        <button>Back Home</button>
     </form>
 {% endblock %}

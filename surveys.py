@@ -21,8 +21,6 @@ class Survey:
         self.title = title
         self.instructions = instructions
         self.questions = questions
-        self.answers = []
-        self.complete = False
         
 
 satisfaction_survey = Survey(

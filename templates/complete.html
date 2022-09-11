@@ -1,8 +1,0 @@
-{% extends 'base.html' %}
-
-{% block title %}{{chosen_survey}} - complete{% endblock %}
-
-{% block content %}
-    <h3>{{surveys[chosen_survey].title}}:</h3>
-    <p>You have already completed the {{surveys[chosen_survey].title}}. Please choose another survey!</p>
-{% endblock %}
