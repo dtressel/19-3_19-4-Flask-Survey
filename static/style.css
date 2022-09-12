@@ -50,3 +50,17 @@ button, input {
 ul button, ul input {
   margin-left: -20px;
 }
+
+.thank_you_question {
+  margin-bottom: 6px;
+}
+
+.thank_you_answer {
+  margin-top: 0;
+  text-indent: 10px;
+  font-style: italic;
+}
+
+h4 {
+  margin-bottom: 0;
+}

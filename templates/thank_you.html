@@ -8,4 +8,9 @@
     <form action="/">
         <button>Home</button>
     </form>
+    <h4>Your Responses:</h4>
+    {% for question_list_item in surveys[chosen_survey].questions %}
+        <p class="thank_you_question">{{question_list_item.question}}</p>
+        <p class="thank_you_answer">{{session[chosen_survey][loop.index0]}}</p>
+    {% endfor %}
 {% endblock %}
